@@ -1597,7 +1597,7 @@ class ReactNativeHealthkit: RCTEventEmitter {
                   if let sample = s as? HKClinicalRecord {
                       var dict: [String: Any] = [
                           "uuid": sample.uuid.uuidString,
-                          "device": self.serializeDevice(_device: sample.device) as Any,
+                          "device": serializeDevice(_device: sample.device) as Any,
                           "clinicalType": sample.clinicalType.identifier,
                           "endDate": self._dateFormatter.string(from: sample.endDate),
                           "startDate": self._dateFormatter.string(from: sample.startDate),
@@ -1654,7 +1654,7 @@ class ReactNativeHealthkit: RCTEventEmitter {
                       if let cdaDocument = (d as? HKCDADocumentSample)?.document {
                           let serialized = [
                               "uuid": d.uuid.uuidString,
-                              "device": self.serializeDevice(_device: d.device) as Any,
+                              "device": serializeDevice(_device: d.device) as Any,
                               "documentType": d.documentType.identifier,
                               "documentData": cdaDocument.documentData?.base64EncodedString() as Any,
                               "title": cdaDocument.title,
