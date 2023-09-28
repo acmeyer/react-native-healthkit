@@ -835,6 +835,8 @@ export type HealthkitReadAuthorization =
   | HKDocumentTypeIdentifier
   | HKSampleTypeIdentifier
   | `${HKCharacteristicTypeIdentifier}`
+  | `${HKClinicalTypeIdentifier}`
+  | `${HKDocumentTypeIdentifier}`
   | `${HKSampleTypeIdentifier}`;
 export type HealthkitWriteAuthorization = HKSampleTypeIdentifier;
 
