@@ -3,9 +3,13 @@ import type {
   EnergyUnit,
   HKCategorySampleRaw,
   HKCategoryTypeIdentifier,
+  HKClinicalSampleRaw,
+  HKClinicalTypeIdentifier,
   HKCorrelationRaw,
   HKCorrelationTypeIdentifier,
   HKDevice,
+  HKDocumentSampleRaw,
+  HKDocumentTypeIdentifier,
   HKHeartbeatSeriesSampleRaw,
   HKQuantityTypeIdentifier,
   HKSourceRevision,
@@ -53,7 +57,7 @@ export type GenericQueryOptions = {
   readonly to?: Date;
   readonly limit?: number;
   readonly ascending?: boolean;
-  readonly anchor?: string
+  readonly anchor?: string;
 };
 
 /**
@@ -74,7 +78,8 @@ export interface HKWorkout<
  * Represents a heartbeat series sample.
  * @see {@link https://developer.apple.com/documentation/healthkit/hkheartbeatseriessample Apple Docs HKHeartbeatSeriesSample}
  */
-export interface HKHeartbeatSeriesSample extends Omit<HKHeartbeatSeriesSampleRaw, 'endDate' | 'startDate'> {
+export interface HKHeartbeatSeriesSample
+  extends Omit<HKHeartbeatSeriesSampleRaw, 'endDate' | 'startDate'> {
   readonly startDate: Date;
   readonly endDate: Date;
 }
@@ -106,28 +111,39 @@ export interface HKQuantitySample<
  * @template TUnit The unit for the identifier.
  * @see {@link https://developer.apple.com/documentation/healthkit/hkstatisticsquery Apple Docs HKStatisticsQuery}
  */
-export interface QueryStatisticsResponse<TIdentifier extends HKQuantityTypeIdentifier, TUnit extends UnitForIdentifier<TIdentifier> = UnitForIdentifier<TIdentifier>>
-  extends Omit<
+export interface QueryStatisticsResponse<
+  TIdentifier extends HKQuantityTypeIdentifier,
+  TUnit extends UnitForIdentifier<TIdentifier> = UnitForIdentifier<TIdentifier>
+> extends Omit<
   QueryStatisticsResponseRaw<TIdentifier, TUnit>,
   'mostRecentQuantityDateInterval'
   > {
-  readonly mostRecentQuantityDateInterval?: { readonly from: Date; readonly to: Date };
+  readonly mostRecentQuantityDateInterval?: {
+    readonly from: Date;
+    readonly to: Date;
+  };
 }
 
 /**
  * Represents a category sample for saving.
  * @see {@link https://developer.apple.com/documentation/healthkit/hkcategorysample Apple Docs HKCategorySample}
  */
-export type HKCategorySampleForSaving = Omit<HKCategorySample, 'device' | 'endDate' | 'startDate' | 'uuid'> & {
+export type HKCategorySampleForSaving = Omit<
+HKCategorySample,
+'device' | 'endDate' | 'startDate' | 'uuid'
+> & {
   readonly startDate?: Date;
   readonly endDate?: Date;
-}
+};
 
 /**
  * Represents a quantity sample for saving.
  * @see {@link https://developer.apple.com/documentation/healthkit/hkquantitysample Apple Docs HKQuantitySample}
  */
-export type HKQuantitySampleForSaving = Omit<HKQuantitySample, 'device' | 'endDate' | 'startDate' | 'uuid'> & {
+export type HKQuantitySampleForSaving = Omit<
+HKQuantitySample,
+'device' | 'endDate' | 'startDate' | 'uuid'
+> & {
   readonly startDate?: Date;
   readonly endDate?: Date;
 };
@@ -154,3 +170,15 @@ export interface HKCorrelation<TIdentifier extends HKCorrelationTypeIdentifier>
 export type CLLocationForSaving = Omit<CLLocationRawForSaving, 'timestamp'> & {
   readonly timestamp: number;
 };
+
+export interface HKClinicalSample<T extends HKClinicalTypeIdentifier>
+  extends Omit<HKClinicalSampleRaw<T>, 'endDate' | 'startDate'> {
+  readonly startDate: Date;
+  readonly endDate: Date;
+}
+
+export interface HKDocumentSample<T extends HKDocumentTypeIdentifier>
+  extends Omit<HKDocumentSampleRaw<T>, 'endDate' | 'startDate'> {
+  readonly startDate: Date;
+  readonly endDate: Date;
+}

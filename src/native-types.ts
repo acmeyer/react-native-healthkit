@@ -816,7 +816,9 @@ export enum HKCategoryTypeIdentifier {
 
 export type HKSampleTypeIdentifier =
   | HKCategoryTypeIdentifier
+  | HKClinicalTypeIdentifier
   | HKCorrelationTypeIdentifier
+  | HKDocumentTypeIdentifier
   | HKQuantityTypeIdentifier
   | typeof HKActivitySummaryTypeIdentifier
   | typeof HKAudiogramTypeIdentifier
@@ -829,6 +831,8 @@ export type HKSampleTypeIdentifier =
 
 export type HealthkitReadAuthorization =
   | HKCharacteristicTypeIdentifier
+  | HKClinicalTypeIdentifier
+  | HKDocumentTypeIdentifier
   | HKSampleTypeIdentifier
   | `${HKCharacteristicTypeIdentifier}`
   | `${HKSampleTypeIdentifier}`;
@@ -1873,6 +1877,45 @@ export type HKCorrelationRaw<TIdentifier extends HKCorrelationTypeIdentifier> =
     readonly endDate: string;
   };
 
+export enum HKClinicalTypeIdentifier {
+  allergyRecord = 'HKClinicalTypeIdentifierAllergyRecord',
+  conditionRecord = 'HKClinicalTypeIdentifierConditionRecord',
+  immunizationRecord = 'HKClinicalTypeIdentifierImmunizationRecord',
+  labResultRecord = 'HKClinicalTypeIdentifierLabResultRecord',
+  medicationRecord = 'HKClinicalTypeIdentifierMedicationRecord',
+  procedureRecord = 'HKClinicalTypeIdentifierProcedureRecord',
+  vitalSignRecord = 'HKClinicalTypeIdentifierVitalSignRecord',
+}
+
+export type HKClinicalSampleRaw<TIdentifier extends HKClinicalTypeIdentifier> =
+  {
+    readonly clinicalType: TIdentifier;
+    readonly uuid: string;
+    readonly device?: HKDevice;
+    readonly endDate: string;
+    readonly startDate: string;
+    readonly displayName: string;
+    readonly fhirResource?: object;
+  };
+
+export enum HKDocumentTypeIdentifier {
+  CDA = 'HKDocumentTypeIdentifierCDA',
+}
+
+export type HKDocumentSampleRaw<TIdentifier extends HKDocumentTypeIdentifier> =
+  {
+    readonly uuid: string;
+    readonly device?: HKDevice;
+    readonly documentType: TIdentifier;
+    readonly documentData?: string; // base64
+    readonly title: string;
+    readonly patientName: string;
+    readonly custodianName: string;
+    readonly authorName: string;
+    readonly startDate: string;
+    readonly endDate: string;
+  };
+
 type QueryId = string;
 
 /**
@@ -1971,6 +2014,22 @@ type ReactNativeHealthkitTypeNative = {
     from: string,
     to: string
   ) => Promise<readonly HKCorrelationRaw<TIdentifier>[]>;
+
+  readonly queryClinicalSamples: <TIdentifier extends HKClinicalTypeIdentifier>(
+    typeIdentifier: TIdentifier,
+    from: string,
+    to: string,
+    limit: number,
+    ascending: boolean
+  ) => Promise<readonly HKClinicalSampleRaw<TIdentifier>[]>;
+
+  readonly queryDocumentSamples: <TIdentifier extends HKDocumentTypeIdentifier>(
+    typeIdentifier: TIdentifier,
+    from: string,
+    to: string,
+    limit: number,
+    ascending: boolean
+  ) => Promise<readonly HKDocumentSampleRaw<TIdentifier>[]>;
 
   subscribeToObserverQuery(
     identifier: HKSampleTypeIdentifier
@@ -2103,7 +2162,10 @@ type ReactNativeHealthkitTypeNative = {
   readonly getWorkoutRoutes: (
     workoutUUID: string
   ) => Promise<readonly WorkoutRoute[]>;
-  readonly getWorkoutPlanById: (workoutUUID: string) => Promise<{readonly id: string, readonly activityType: HKWorkoutActivityType} | null>;
+  readonly getWorkoutPlanById: (workoutUUID: string) => Promise<{
+    readonly id: string;
+    readonly activityType: HKWorkoutActivityType;
+  } | null>;
 };
 
 const Native = NativeModules.ReactNativeHealthkit as ReactNativeHealthkitTypeNative

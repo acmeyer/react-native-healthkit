@@ -64,6 +64,18 @@ func sampleTypeFromString(typeIdentifier: String) -> HKSampleType? {
         return HKSampleType.correlationType(forIdentifier: identifier) as HKSampleType?
     }
 
+    if typeIdentifier.starts(with: HKDocumentTypeIdentifier_PREFIX) {
+        let identifier = HKDocumentTypeIdentifier.init(rawValue: typeIdentifier)
+        return HKSampleType.documentType(forIdentifier: identifier) as HKSampleType?
+    }
+
+    if #available(iOS 12, *) {
+        if typeIdentifier.starts(with: HKClinicalTypeIdentifier_PREFIX) {
+            let identifier = HKClinicalTypeIdentifier.init(rawValue: typeIdentifier)
+            return HKSampleType.clinicalType(forIdentifier: identifier) as HKSampleType?
+        }
+    }
+
     if #available(iOS 13, *) {
         if typeIdentifier == HKAudiogramTypeIdentifier {
             return HKSampleType.audiogramSampleType()
@@ -128,6 +140,18 @@ func objectTypeFromString(typeIdentifier: String) -> HKObjectType? {
     if typeIdentifier.starts(with: HKCorrelationTypeIdentifier_PREFIX) {
         let identifier = HKCorrelationTypeIdentifier.init(rawValue: typeIdentifier)
         return HKObjectType.correlationType(forIdentifier: identifier) as HKObjectType?
+    }
+
+    if typeIdentifier.starts(with: HKDocumentTypeIdentifier_PREFIX) {
+        let identifier = HKDocumentTypeIdentifier.init(rawValue: typeIdentifier)
+        return HKObjectType.documentType(forIdentifier: identifier) as HKObjectType?
+    }
+
+    if #available(iOS 12, *) {
+        if typeIdentifier.starts(with: HKClinicalTypeIdentifier_PREFIX) {
+            let identifier = HKClinicalTypeIdentifier.init(rawValue: typeIdentifier)
+            return HKObjectType.clinicalType(forIdentifier: identifier) as HKObjectType?
+        }
     }
 
     if typeIdentifier == HKActivitySummaryTypeIdentifier {

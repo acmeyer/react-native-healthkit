@@ -3,6 +3,8 @@ import { Platform } from 'react-native'
 import useHealthkitAuthorization from './hooks/useHealthkitAuthorization'
 import useIsHealthDataAvailable from './hooks/useIsHealthDataAvailable'
 import useMostRecentCategorySample from './hooks/useMostRecentCategorySample'
+import useMostRecentClinicalSample from './hooks/useMostRecentClinicalSample'
+import useMostRecentDocumentSample from './hooks/useMostRecentDocumentSample'
 import useMostRecentQuantitySample from './hooks/useMostRecentQuantitySample'
 import useMostRecentWorkout from './hooks/useMostRecentWorkout'
 import useSubscribeToChanges from './hooks/useSubscribeToChanges'
@@ -19,7 +21,9 @@ import getRequestStatusForAuthorization from './utils/getRequestStatusForAuthori
 import getWorkoutPlanById from './utils/getWorkoutPlanById'
 import queryCategorySamples from './utils/queryCategorySamples'
 import queryCategorySamplesWithAnchor from './utils/queryCategorySamplesWithAnchor'
+import queryClinicalSamples from './utils/queryClinicalSamples'
 import queryCorrelationSamples from './utils/queryCorrelationSamples'
+import queryDocumentSamples from './utils/queryDocumentSamples'
 import queryHeartbeatSeriesSamples from './utils/queryHeartbeatSeriesSamples'
 import queryHeartbeatSeriesSamplesWithAnchor from './utils/queryHeartbeatSeriesSamplesWithAnchor'
 import queryQuantitySamples from './utils/queryQuantitySamples'
@@ -45,14 +49,16 @@ const availableQuantityTypes = (majorVersionIOS = currentMajorVersionIOS) => {
   }
 
   // remove types that are not available before iOS 17
-  return allQuantityTypesList.filter((type) => ![
-    HKQuantityTypeIdentifier.cyclingCadence,
-    HKQuantityTypeIdentifier.cyclingFunctionalThresholdPower,
-    HKQuantityTypeIdentifier.cyclingPower,
-    HKQuantityTypeIdentifier.cyclingSpeed,
-    HKQuantityTypeIdentifier.physicalEffort,
-    HKQuantityTypeIdentifier.timeInDaylight,
-  ].includes(type))
+  return allQuantityTypesList.filter(
+    (type) => ![
+      HKQuantityTypeIdentifier.cyclingCadence,
+      HKQuantityTypeIdentifier.cyclingFunctionalThresholdPower,
+      HKQuantityTypeIdentifier.cyclingPower,
+      HKQuantityTypeIdentifier.cyclingSpeed,
+      HKQuantityTypeIdentifier.physicalEffort,
+      HKQuantityTypeIdentifier.timeInDaylight,
+    ].includes(type),
+  )
 }
 
 const authorizationStatusFor = Native.authorizationStatusFor.bind(Native)
@@ -73,9 +79,9 @@ const getWorkoutRoutes = Native.getWorkoutRoutes.bind(Native)
  */
 export default {
   /**
-  * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614154-authorizationstatus authorizationStatus(for:) (Apple Docs) }
-  * @see {@link https://developer.apple.com/documentation/healthkit/authorizing_access_to_health_data Authorizing access to health data (Apple Docs) }
-  */
+   * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614154-authorizationstatus authorizationStatus(for:) (Apple Docs) }
+   * @see {@link https://developer.apple.com/documentation/healthkit/authorizing_access_to_health_data Authorizing access to health data (Apple Docs) }
+   */
   authorizationStatusFor,
 
   /**
@@ -85,10 +91,10 @@ export default {
   availableQuantityTypes,
 
   /**
-    * @description By default, HealthKit data is available on iOS and watchOS. HealthKit data is also available on iPadOS 17 or later. However, devices running in an enterprise environment may restrict access to HealthKit data.
-    * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614180-ishealthdataavailable isHealthDataAvailable() (Apple Docs)}
-    * @returns {boolean} true if HealthKit is available; otherwise, false.
-    */
+   * @description By default, HealthKit data is available on iOS and watchOS. HealthKit data is also available on iPadOS 17 or later. However, devices running in an enterprise environment may restrict access to HealthKit data.
+   * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614180-ishealthdataavailable isHealthDataAvailable() (Apple Docs)}
+   * @returns {boolean} true if HealthKit is available; otherwise, false.
+   */
   isHealthDataAvailable,
 
   /**
@@ -147,8 +153,8 @@ export default {
   getMostRecentWorkout,
 
   /**
-  * @see {@link https://developer.apple.com/documentation/healthkit/workouts_and_activity_rings/reading_route_data Reading route data (Apple Docs)}
-  * @see {@link https://developer.apple.com/documentation/healthkit/hkworkoutroutequery HKWorkoutRouteQuery (Apple Docs)}
+   * @see {@link https://developer.apple.com/documentation/healthkit/workouts_and_activity_rings/reading_route_data Reading route data (Apple Docs)}
+   * @see {@link https://developer.apple.com/documentation/healthkit/hkworkoutroutequery HKWorkoutRouteQuery (Apple Docs)}
    */
   getWorkoutRoutes,
   getWorkoutPlanById,
@@ -160,7 +166,9 @@ export default {
   // query methods
   queryCategorySamples,
   queryCategorySamplesWithAnchor,
+  queryClinicalSamples,
   queryCorrelationSamples,
+  queryDocumentSamples,
   queryHeartbeatSeriesSamples,
   queryHeartbeatSeriesSamplesWithAnchor,
   queryQuantitySamples,
@@ -194,6 +202,14 @@ export default {
    */
   useMostRecentCategorySample,
   /**
+   * @returns the most recent sample for the given clinical type.
+   */
+  useMostRecentClinicalSample,
+  /**
+   * @returns the most recent sample for the given document type.
+   */
+  useMostRecentDocumentSample,
+  /**
    * @returns the most recent sample for the given quantity type.
    */
   useMostRecentQuantitySample,
@@ -203,10 +219,10 @@ export default {
   useMostRecentWorkout,
   useSubscribeToChanges,
   /**
-     * @description By default, HealthKit data is available on iOS and watchOS. HealthKit data is also available on iPadOS 17 or later. However, devices running in an enterprise environment may restrict access to HealthKit data.
-    * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614180-ishealthdataavailable Apple Docs}
-    * @returns {boolean | null} true if HealthKit is available; otherwise, false. null while initializing.
-    */
+   * @description By default, HealthKit data is available on iOS and watchOS. HealthKit data is also available on iPadOS 17 or later. However, devices running in an enterprise environment may restrict access to HealthKit data.
+   * @see {@link https://developer.apple.com/documentation/healthkit/hkhealthstore/1614180-ishealthdataavailable Apple Docs}
+   * @returns {boolean | null} true if HealthKit is available; otherwise, false. null while initializing.
+   */
   useIsHealthDataAvailable,
   /**
    * @description Hook to retrieve the current authorization status for the given types, and request authorization if needed.

@@ -158,6 +158,24 @@ RCT_EXTERN_METHOD(saveWorkoutRoute:(NSString)workoutUUID
                   reject:(RCTPromiseRejectBlock)reject
 )
 
+RCT_EXTERN_METHOD(queryClinicalSamples:(NSString)typeIdentifier
+                  from:(NSDate)from
+                  to:(NSDate)to
+                  limit:(NSNumber)limit
+                  ascending:(BOOL)ascending
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(queryDocumentSamples:(NSString)typeIdentifier
+                  from:(NSDate)from
+                  to:(NSDate)to
+                  limit:(NSNumber)limit
+                  ascending:(BOOL)ascending
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject
+)
+
 RCT_EXTERN_METHOD(queryCorrelationSamples:(NSString)typeIdentifier
                   from:(NSDate)from
                   to:(NSDate)to

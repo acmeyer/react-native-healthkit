@@ -1,16 +1,20 @@
 import { Platform } from 'react-native'
 
 import {
-  HKAuthorizationRequestStatus, HKAuthorizationStatus, HKBiologicalSex, HKBloodType, HKFitzpatrickSkinType, HKUnits, HKWheelchairUse,
+  HKAuthorizationRequestStatus,
+  HKAuthorizationStatus,
+  HKBiologicalSex,
+  HKBloodType,
+  HKFitzpatrickSkinType,
+  HKUnits,
+  HKWheelchairUse,
 } from './native-types'
 
 import type ReactNativeHealthkit from './index.ios'
 import type { QueryCategorySamplesFn } from './utils/queryCategorySamples'
 import type { QueryQuantitySamplesFn } from './utils/queryQuantitySamples'
 
-const notAvailableError = `[@kingstinct/react-native-healthkit] Platform "${
-  Platform.OS
-}" not supported`
+const notAvailableError = `[@kingstinct/react-native-healthkit] Platform "${Platform.OS}" not supported`
 
 let hasWarned = false
 
@@ -26,7 +30,9 @@ function UnavailableFn<T = unknown>(retVal: T) {
 }
 
 const Healthkit = {
-  authorizationStatusFor: UnavailableFn(Promise.resolve(HKAuthorizationStatus.notDetermined)),
+  authorizationStatusFor: UnavailableFn(
+    Promise.resolve(HKAuthorizationStatus.notDetermined),
+  ),
   availableQuantityTypes: UnavailableFn([]),
   disableAllBackgroundDelivery: UnavailableFn(Promise.resolve(false)),
   disableBackgroundDelivery: UnavailableFn(Promise.resolve(false)),
@@ -34,44 +40,62 @@ const Healthkit = {
   getBiologicalSex: UnavailableFn(Promise.resolve(HKBiologicalSex.notSet)),
   getBloodType: UnavailableFn(Promise.resolve(HKBloodType.notSet)),
   getDateOfBirth: UnavailableFn(Promise.resolve(new Date(0))),
-  getFitzpatrickSkinType: UnavailableFn(Promise.resolve(HKFitzpatrickSkinType.notSet)),
+  getFitzpatrickSkinType: UnavailableFn(
+    Promise.resolve(HKFitzpatrickSkinType.notSet),
+  ),
   getMostRecentCategorySample: UnavailableFn(Promise.resolve(null)),
   getMostRecentQuantitySample: UnavailableFn(Promise.resolve(null)),
   getMostRecentWorkout: UnavailableFn(Promise.resolve(null)),
   getPreferredUnit: UnavailableFn(Promise.resolve(HKUnits.Count)),
   getPreferredUnits: UnavailableFn(Promise.resolve([])),
-  getRequestStatusForAuthorization: UnavailableFn(Promise.resolve(HKAuthorizationRequestStatus.unknown)),
+  getRequestStatusForAuthorization: UnavailableFn(
+    Promise.resolve(HKAuthorizationRequestStatus.unknown),
+  ),
   getWheelchairUse: UnavailableFn(Promise.resolve(HKWheelchairUse.notSet)),
   getWorkoutRoutes: UnavailableFn(Promise.resolve([])),
   isHealthDataAvailable: async () => Promise.resolve(false),
-  queryCategorySamples: UnavailableFn(Promise.resolve([])) as unknown as QueryCategorySamplesFn,
-  queryCategorySamplesWithAnchor: UnavailableFn(Promise.resolve({
-    samples: [],
-    deletedSamples: [],
-    newAnchor: '',
-  })),
+  queryCategorySamples: UnavailableFn(
+    Promise.resolve([]),
+  ) as unknown as QueryCategorySamplesFn,
+  queryCategorySamplesWithAnchor: UnavailableFn(
+    Promise.resolve({
+      samples: [],
+      deletedSamples: [],
+      newAnchor: '',
+    }),
+  ),
+  queryClinicalSamples: UnavailableFn(Promise.resolve([])),
   queryCorrelationSamples: UnavailableFn(Promise.resolve([])),
+  queryDocumentSamples: UnavailableFn(Promise.resolve([])),
   queryHeartbeatSeriesSamples: UnavailableFn(Promise.resolve([])),
-  queryHeartbeatSeriesSamplesWithAnchor: UnavailableFn(Promise.resolve({
-    samples: [],
-    deletedSamples: [],
-    newAnchor: '',
-  })),
-  queryQuantitySamples: UnavailableFn(Promise.resolve([])) as unknown as QueryQuantitySamplesFn,
-  queryQuantitySamplesWithAnchor: UnavailableFn(Promise.resolve({
-    samples: [],
-    deletedSamples: [],
-    newAnchor: '',
-  })),
-  queryStatisticsForQuantity: UnavailableFn(Promise.resolve({
-    averageQuantity: undefined,
-    maximumQuantity: undefined,
-    minimumQuantity: undefined,
-    sumQuantity: undefined,
-    mostRecentQuantity: undefined,
-    mostRecentQuantityDateInterval: undefined,
-    duration: undefined,
-  })),
+  queryHeartbeatSeriesSamplesWithAnchor: UnavailableFn(
+    Promise.resolve({
+      samples: [],
+      deletedSamples: [],
+      newAnchor: '',
+    }),
+  ),
+  queryQuantitySamples: UnavailableFn(
+    Promise.resolve([]),
+  ) as unknown as QueryQuantitySamplesFn,
+  queryQuantitySamplesWithAnchor: UnavailableFn(
+    Promise.resolve({
+      samples: [],
+      deletedSamples: [],
+      newAnchor: '',
+    }),
+  ),
+  queryStatisticsForQuantity: UnavailableFn(
+    Promise.resolve({
+      averageQuantity: undefined,
+      maximumQuantity: undefined,
+      minimumQuantity: undefined,
+      sumQuantity: undefined,
+      mostRecentQuantity: undefined,
+      mostRecentQuantityDateInterval: undefined,
+      duration: undefined,
+    }),
+  ),
   queryWorkouts: UnavailableFn(Promise.resolve([])),
   querySources: UnavailableFn(Promise.resolve([])),
   requestAuthorization: UnavailableFn(Promise.resolve(false)),
@@ -83,12 +107,19 @@ const Healthkit = {
   saveQuantitySample: UnavailableFn(Promise.resolve(false)),
   saveWorkoutSample: UnavailableFn(Promise.resolve(null)),
   saveWorkoutRoute: UnavailableFn(Promise.resolve(false)),
-  subscribeToChanges: UnavailableFn(Promise.resolve(async () => Promise.resolve(false))),
+  subscribeToChanges: UnavailableFn(
+    Promise.resolve(async () => Promise.resolve(false)),
+  ),
   useMostRecentCategorySample: UnavailableFn(null),
+  useMostRecentClinicalSample: UnavailableFn(null),
+  useMostRecentDocumentSample: UnavailableFn(null),
   useMostRecentQuantitySample: UnavailableFn(null),
   useMostRecentWorkout: UnavailableFn(null),
   useSubscribeToChanges: UnavailableFn([null, () => null]),
-  useHealthkitAuthorization: UnavailableFn([null, async () => Promise.resolve(HKAuthorizationRequestStatus.unknown)] as const),
+  useHealthkitAuthorization: UnavailableFn([
+    null,
+    async () => Promise.resolve(HKAuthorizationRequestStatus.unknown),
+  ] as const),
   useIsHealthDataAvailable: () => false,
   canAccessProtectedData: async () => Promise.resolve(false),
   isProtectedDataAvailable: async () => Promise.resolve(false),

@@ -15,7 +15,7 @@ React Native bindings for HealthKit with full TypeScript and Promise support cov
 | 75+ Workout Activity Types  | ✅    | ✅    | ✅       | Swimming, running, table tennis etc..  |
 | Correlation Types           | ✅    | ✅    | ✅       | Food and blood pressure                |
 | Document Types              | ✅    | ❌    | ✅       | [CDA documents](https://developer.apple.com/documentation/healthkit/hkcdadocument) exposed as Base64 data  |
-| Clinical Records            | ⚠️    | ❌    | ⚠️       | Lab results etc in [FHIR JSON format](https://www.hl7.org/fhir/json.html) (see [Clinical Records](https://github.com/kingstinct/react-native-healthkit#clinical-records))  |
+| Clinical Records            | ✅    | ❌    | ✅       | Lab results etc in [FHIR JSON format](https://www.hl7.org/fhir/json.html) (see [Clinical Records](https://github.com/kingstinct/react-native-healthkit#clinical-records))  |
 
 ### Disclaimer
 
