@@ -1569,7 +1569,15 @@ class ReactNativeHealthkit: RCTEventEmitter {
 
   @available(iOS 12, *)
   @objc(queryClinicalSamples:from:to:limit:ascending:resolve:reject:)
-  func queryClinicalSamples(typeIdentifier: String, from: Date, to: Date, limit: Int, ascending: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func queryClinicalSamples(
+    typeIdentifier: String,
+    from: Date,
+    to: Date,
+    limit: Int,
+    ascending: Bool,
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
       guard let store = _store else {
           return reject(INIT_ERROR, INIT_ERROR_MESSAGE, nil)
       }
@@ -1579,12 +1587,10 @@ class ReactNativeHealthkit: RCTEventEmitter {
           return reject(TYPE_IDENTIFIER_ERROR, typeIdentifier, nil)
       }
 
-      let from = from.timeIntervalSince1970 > 0 ? from : nil
-      let to = to.timeIntervalSince1970 > 0 ? to : nil
-
-      let predicate = from != nil || to != nil ? HKQuery.predicateForSamples(withStart: from, end: to, options: [HKQueryOptions.strictEndDate, HKQueryOptions.strictStartDate]) : nil
-
-      let limit = limit == 0 ? HKObjectQueryNoLimit : limit
+      let from = dateOrNilIfZero(date: from)
+      let to = dateOrNilIfZero(date: to)
+      let predicate = createPredicate(from: from, to: to)
+      let limit = limitOrNilIfZero(limit: limit)
 
       let q = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: Bool(truncating: ascending))]) { (_: HKSampleQuery, _samples: [HKSample]?, error: Error?) in
           guard let err = error else {
@@ -1625,7 +1631,15 @@ class ReactNativeHealthkit: RCTEventEmitter {
   }
 
   @objc(queryDocumentSamples:from:to:limit:ascending:resolve:reject:)
-  func queryDocumentSamples(typeIdentifier: String, from: Date, to: Date, limit: Int, ascending: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  func queryDocumentSamples(
+    typeIdentifier: String,
+    from: Date,
+    to: Date,
+    limit: Int,
+    ascending: Bool,
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
       guard let store = _store else {
           return reject(INIT_ERROR, INIT_ERROR_MESSAGE, nil)
       }
@@ -1635,12 +1649,10 @@ class ReactNativeHealthkit: RCTEventEmitter {
           return reject(TYPE_IDENTIFIER_ERROR, typeIdentifier, nil)
       }
 
-      let from = from.timeIntervalSince1970 > 0 ? from : nil
-      let to = to.timeIntervalSince1970 > 0 ? to : nil
-
-      let predicate = from != nil || to != nil ? HKQuery.predicateForSamples(withStart: from, end: to, options: [HKQueryOptions.strictEndDate, HKQueryOptions.strictStartDate]) : nil
-
-      let limit = limit == 0 ? HKObjectQueryNoLimit : limit
+      let from = dateOrNilIfZero(date: from)
+      let to = dateOrNilIfZero(date: to)
+      let predicate = createPredicate(from: from, to: to)
+      let limit = limitOrNilIfZero(limit: limit)
 
       let q = HKDocumentQuery(documentType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: Bool(truncating: ascending))], includeDocumentData: true) { (_: HKDocumentQuery, _documents: [HKDocumentSample]?, _: Bool, error: Error?) in
           guard let err = error else {

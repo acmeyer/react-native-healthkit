@@ -17,13 +17,13 @@ let HKCharacteristicTypeIdentifier_PREFIX = "HKCharacteristicTypeIdentifier"
 let HKQuantityTypeIdentifier_PREFIX = "HKQuantityTypeIdentifier"
 let HKCategoryTypeIdentifier_PREFIX = "HKCategoryTypeIdentifier"
 let HKCorrelationTypeIdentifier_PREFIX = "HKCorrelationTypeIdentifier"
+let HKClinicalTypeIdentifier_PREFIX = "HKClinicalTypeIdentifier"
+let HKDocumentTypeIdentifier_PREFIX = "HKDocumentTypeIdentifier"
 let HKActivitySummaryTypeIdentifier = "HKActivitySummaryTypeIdentifier"
 let HKAudiogramTypeIdentifier = "HKAudiogramTypeIdentifier"
 let HKWorkoutTypeIdentifier = "HKWorkoutTypeIdentifier"
 let HKWorkoutRouteTypeIdentifier = "HKWorkoutRouteTypeIdentifier"
 let HKDataTypeIdentifierHeartbeatSeries = "HKDataTypeIdentifierHeartbeatSeries"
-let HKClinicalTypeIdentifier_PREFIX = "HKClinicalTypeIdentifier"
-let HKDocumentTypeIdentifier_PREFIX = "HKDocumentTypeIdentifier"
 
 let SpeedUnit =  HKUnit(from: "m/s") // HKUnit.meter().unitDivided(by: HKUnit.second())
 // Support for MET data: HKAverageMETs 8.24046 kcal/hr·kg
