@@ -1574,7 +1574,7 @@ class ReactNativeHealthkit: RCTEventEmitter {
     from: Date,
     to: Date,
     limit: Int,
-    ascending: Bool,
+    ascending: NSNumber,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
@@ -1636,7 +1636,7 @@ class ReactNativeHealthkit: RCTEventEmitter {
     from: Date,
     to: Date,
     limit: Int,
-    ascending: Bool,
+    ascending: NSNumber,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
